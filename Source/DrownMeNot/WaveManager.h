@@ -32,6 +32,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wave Characteristics")
 	EOverallWaveType OverallWaveType;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	USceneComponent* TestSpawnPointSceneComponent;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Spawn Parameters")
 	TArray<FVector> SpawnPoints;

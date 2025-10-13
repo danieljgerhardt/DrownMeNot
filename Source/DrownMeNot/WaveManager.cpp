@@ -9,13 +9,17 @@ AWaveManager::AWaveManager()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	TestSpawnPointSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("TestSpawnPointSceneComponent"));
+	RootComponent = TestSpawnPointSceneComponent;
+
 }
 
 // Called when the game starts or when spawned
 void AWaveManager::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	SpawnPoints.Add(TestSpawnPointSceneComponent->GetComponentLocation());
+	StartNextWave();
 }
 
 // Called every frame
