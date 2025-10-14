@@ -27,18 +27,25 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wave Characteristics")
 	int TotalWaveCount;
 	
+	// List of classes an enemy can be spawned from
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wave Characteristics")
-	TArray<ACharacterBase*> EnemyPool;
+	TArray<TSubclassOf<ACharacterBase>> EnemyClassPool;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wave Characteristics")
 	EOverallWaveType OverallWaveType;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-	USceneComponent* TestSpawnPointSceneComponent;
+	USceneComponent* RootComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	TArray<USceneComponent*> SpawnPointSceneComponents;
+
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Spawn Parameters")
-	TArray<FVector> SpawnPoints;
+	TArray<FVector> SpawnPointLocations;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawn Parameters")
+	int NumSpawnPoints = 3;
 private:
 	int CurrentWave = 0;
 

@@ -9,16 +9,30 @@ AWaveManager::AWaveManager()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	TestSpawnPointSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("TestSpawnPointSceneComponent"));
-	RootComponent = TestSpawnPointSceneComponent;
+	RootComp = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+	RootComponent = RootComp;
 
+	SpawnPointSceneComponents.Reserve(NumSpawnPoints);
+
+	for (int i = 0; i < NumSpawnPoints; i++) {
+		USceneComponent* NewSpawnPoint = CreateDefaultSubobject<USceneComponent>(*FString::Printf(TEXT("SpawnPoint%d"), i));
+		NewSpawnPoint->SetupAttachment(RootComponent);
+		NewSpawnPoint->SetRelativeLocation(FVector(i * 200.0f, 0.0f, 0.0f)); // Example spacing
+		SpawnPointSceneComponents.Add(NewSpawnPoint);
+	}
 }
 
 // Called when the game starts or when spawned
 void AWaveManager::BeginPlay()
 {
 	Super::BeginPlay();
-	SpawnPoints.Add(TestSpawnPointSceneComponent->GetComponentLocation());
+
+	for (int i = 0; i < NumSpawnPoints; i++) {
+		if (SpawnPointSceneComponents.IsValidIndex(i) && SpawnPointSceneComponents[i]) {
+			SpawnPointLocations.Add(SpawnPointSceneComponents[i]->GetComponentLocation());
+		}
+	}
+
 	StartNextWave();
 }
 
@@ -26,7 +40,6 @@ void AWaveManager::BeginPlay()
 void AWaveManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void AWaveManager::StartNextWave()
@@ -53,20 +66,25 @@ void AWaveManager::StartNextEasyWavePreset(int WaveNumber)
 	switch (WaveNumber)
 	{
 	case 1:
-		SpawnEnemiesForWave(2);
+		SpawnEnemiesForWave(6);
 		break;
 	}
 }
 
 void AWaveManager::SpawnEnemiesForWave(int EnemyCount)
 {
-	if (EnemyPool.Num() == 0 || SpawnPoints.Num() == 0) return;
 	for (int i = 0; i < EnemyCount; i++)
 	{
-		int EnemyIndex = FMath::RandRange(0, EnemyPool.Num() - 1);
-		int SpawnPointIndex = FMath::RandRange(0, SpawnPoints.Num() - 1);
-		FVector SpawnLocation = SpawnPoints[SpawnPointIndex];
-		EnemyPool[EnemyIndex]->SetActorLocation(SpawnLocation);
+		int SpawnPointIndex = FMath::RandRange(0, SpawnPointLocations.Num() - 1);
+		FVector SpawnLocation = SpawnPointLocations[SpawnPointIndex];
+		
+		//create new enemy of random class from pool
+		if (EnemyClassPool.Num() > 0)
+		{
+			int EnemyClassIndex = FMath::RandRange(0, EnemyClassPool.Num() - 1);
+			TSubclassOf<ACharacterBase> EnemyClass = EnemyClassPool[EnemyClassIndex];
+			GetWorld()->SpawnActor<ACharacterBase>(EnemyClass, SpawnLocation, FRotator::ZeroRotator);
+		}
 	}
 }
 
