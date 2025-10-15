@@ -4,6 +4,7 @@
 #include "CharacterBase.h"
 
 #include "Components/CapsuleComponent.h"
+#include "DrownMeNot/EnhancedInputAbilitySystem.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "DrownMeNot/GameplayAbilitySystem/AttributeSets/BasicAttributeSet.h"
 
@@ -13,7 +14,7 @@ ACharacterBase::ACharacterBase()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
+	AbilitySystemComponent = CreateDefaultSubobject<UEnhancedInputAbilitySystem>(TEXT("AbilitySystemComponent"));
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(AscReplicationMode);
 
