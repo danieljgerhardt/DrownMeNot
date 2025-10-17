@@ -6,7 +6,11 @@
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
 #include "AbilitySystemComponent.h"
+#include "Delegates/DelegateCombinations.h"
 #include "CharacterBase.generated.h"
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDeathDelegate);
+
 
 UCLASS()
 class DROWNMENOT_API ACharacterBase : public ACharacter, public IAbilitySystemInterface
@@ -43,5 +47,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
+	UPROPERTY(BlueprintAssignable, Category = "Events")
+	FDeathDelegate OnDeath;
 
 };

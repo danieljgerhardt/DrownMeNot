@@ -83,9 +83,18 @@ void AWaveManager::SpawnEnemiesForWave(int EnemyCount)
 		{
 			int EnemyClassIndex = FMath::RandRange(0, EnemyClassPool.Num() - 1);
 			TSubclassOf<ACharacterBase> EnemyClass = EnemyClassPool[EnemyClassIndex];
-			GetWorld()->SpawnActor<ACharacterBase>(EnemyClass, SpawnLocation, FRotator::ZeroRotator);
+			ACharacterBase* NewEnemy = GetWorld()->SpawnActor<ACharacterBase>(EnemyClass, SpawnLocation, FRotator::ZeroRotator);
+			NewEnemy->OnDeath.AddDynamic(this, &AWaveManager::OnCharacterDied);
+
 		}
 	}
+}
+
+void AWaveManager::OnCharacterDied()
+{
+	//print debug message for testing
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Hello from AddOnScreenDebugMessage!"));
 }
 
 

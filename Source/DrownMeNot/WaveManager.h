@@ -65,4 +65,7 @@ private:
 
 	void SpawnEnemiesForWave(int EnemyCount);
 
+	UFUNCTION()
+	void OnCharacterDied();
+
 };
