@@ -4,6 +4,7 @@
 #include "DrownMeNot/GameplayAbilitySystem/AttributeSets/BasicAttributeSet.h"
 #include "Net/UnrealNetwork.h"
 #include "GameplayEffectExtension.h"
+#include "DrownMeNot/GameplayAbilitySystem/Characters/CharacterBase.h"
 
 UBasicAttributeSet::UBasicAttributeSet()
 	: Health(100.f)
@@ -41,6 +42,17 @@ void UBasicAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
 		SetHealth(GetHealth());
+
+		if (GetHealth() <= 0.0f)
+		{
+			ACharacterBase* OwnerCharacter = Cast<ACharacterBase>(GetOwningActor());
+			if (OwnerCharacter)
+			{
+				OwnerCharacter->OnDeath.Broadcast();
+				OwnerCharacter->Destroy();
+			}
+		}
+
 	}
 	else if (Data.EvaluatedData.Attribute == GetManaAttribute())
 	{

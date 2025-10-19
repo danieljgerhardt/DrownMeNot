@@ -81,6 +81,7 @@ void AWaveManager::SpawnEnemiesForWave(int EnemyCount)
 		//create new enemy of random class from pool
 		if (EnemyClassPool.Num() > 0)
 		{
+			EnemyCountThisWave++;
 			int EnemyClassIndex = FMath::RandRange(0, EnemyClassPool.Num() - 1);
 			TSubclassOf<ACharacterBase> EnemyClass = EnemyClassPool[EnemyClassIndex];
 			ACharacterBase* NewEnemy = GetWorld()->SpawnActor<ACharacterBase>(EnemyClass, SpawnLocation, FRotator::ZeroRotator);
@@ -92,9 +93,26 @@ void AWaveManager::SpawnEnemiesForWave(int EnemyCount)
 
 void AWaveManager::OnCharacterDied()
 {
-	//print debug message for testing
+	NumEnemiesKilledThisWave++;
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Hello from AddOnScreenDebugMessage!"));
+	//print num enemies killed
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Enemies Killed This Wave: %d / %d"), NumEnemiesKilledThisWave, EnemyCountThisWave));
+
+	if (NumEnemiesKilledThisWave >= EnemyCountThisWave && EnemyCountThisWave > 0) {
+		ProcessWaveEnd();
+	}
 }
 
+void AWaveManager::ProcessWaveEnd()
+{
+	NumEnemiesKilledThisWave = 0;
+	EnemyCountThisWave = 0;
+
+	// debug print that wave ended
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Wave %d Ended"), CurrentWave));
+
+	if (CurrentWave < TotalWaveCount) {
+		StartNextWave();
+	}
+}
 

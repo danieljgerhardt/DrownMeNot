@@ -41,20 +41,6 @@ ACharacterBase::ACharacterBase()
 void ACharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
-
-	//delay ten seconds
-	// Declare a FTimerHandle in your class to manage the timer
-	//FTimerHandle MyTimerHandle;
-
-	//// In your .cpp file, where you want to initiate the delay:
-	//GetWorldTimerManager().SetTimer(MyTimerHandle, [&]()
-	//	{
-	//		// Code to be executed after the delay
-
-	//		OnDeath.Broadcast();
-	//	}, 3.0f, false); // 3.0f is the delay duration in seconds, false means it won't loop
-	//
-
 }
 
 void ACharacterBase::PossessedBy(AController* NewController)

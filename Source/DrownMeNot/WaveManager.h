@@ -48,6 +48,8 @@ public:
 	int NumSpawnPoints = 3;
 private:
 	int CurrentWave = 0;
+	int NumEnemiesKilledThisWave = 0;
+	int EnemyCountThisWave = 0;
 
 protected:
 	// Called when the game starts or when spawned
@@ -64,6 +66,8 @@ private:
 	void StartNextEasyWavePreset(int WaveNumber);
 
 	void SpawnEnemiesForWave(int EnemyCount);
+
+	void ProcessWaveEnd();
 
 	UFUNCTION()
 	void OnCharacterDied();
