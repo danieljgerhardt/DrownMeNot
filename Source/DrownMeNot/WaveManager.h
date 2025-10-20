@@ -69,6 +69,8 @@ private:
 
 	void ProcessWaveEnd();
 
+	void ProcessWin();
+
 	UFUNCTION()
 	void OnCharacterDied();
 

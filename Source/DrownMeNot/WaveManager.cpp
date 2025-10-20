@@ -68,6 +68,16 @@ void AWaveManager::StartNextEasyWavePreset(int WaveNumber)
 	case 1:
 		SpawnEnemiesForWave(6);
 		break;
+	case 2:
+		SpawnEnemiesForWave(8);
+		break;
+	case 3:
+		SpawnEnemiesForWave(10);
+		break;
+	case 4:
+		ProcessWin();
+	default:
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("No preset defined for wave %d"), WaveNumber));
 	}
 }
 
@@ -114,5 +124,11 @@ void AWaveManager::ProcessWaveEnd()
 	if (CurrentWave < TotalWaveCount) {
 		StartNextWave();
 	}
+}
+
+void AWaveManager::ProcessWin()
+{
+	//print you win
+	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Yellow, TEXT("All Waves Completed! You Win!"));
 }
 
