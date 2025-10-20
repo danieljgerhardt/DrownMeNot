@@ -46,7 +46,7 @@ void UBasicAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 		if (GetHealth() <= 0.0f)
 		{
 			ACharacterBase* OwnerCharacter = Cast<ACharacterBase>(GetOwningActor());
-			if (OwnerCharacter)
+			if (OwnerCharacter && !OwnerCharacter->IsPlayerControlled())
 			{
 				OwnerCharacter->OnDeath.Broadcast();
 				OwnerCharacter->Destroy();
