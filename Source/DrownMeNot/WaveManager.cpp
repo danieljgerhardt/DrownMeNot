@@ -66,13 +66,13 @@ void AWaveManager::StartNextEasyWavePreset(int WaveNumber)
 	switch (WaveNumber)
 	{
 	case 1:
-		SpawnEnemiesForWave(6);
+		SpawnEnemiesForWave(1);
 		break;
 	case 2:
-		SpawnEnemiesForWave(8);
+		SpawnEnemiesForWave(3);
 		break;
 	case 3:
-		SpawnEnemiesForWave(10);
+		SpawnEnemiesForWave(5);
 		break;
 	case 4:
 		ProcessWin();
