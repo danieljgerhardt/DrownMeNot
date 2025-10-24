@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "DrownMeNot/GameplayAbilitySystem/Characters/CharacterBase.h"
 #include "Containers/Array.h"
+#include "Delegates/DelegateCombinations.h"
 #include "WaveManager.generated.h"
 
 UENUM(BlueprintType)
@@ -14,6 +15,13 @@ enum class EOverallWaveType : uint8
 	ProcedurallyGenerated UMETA(DisplayName = "ProcedurallyGenerated"),
 	EasyWavePreset UMETA(DisplayName = "EasyWavePreset"),
 };
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(
+	FOnWaveInfoChanged,
+	int32, CurrentEnemyCount,
+	int32, TotalWaveEnemyCount,
+	int32, CurrentWaveNumber
+);
 
 UCLASS()
 class DROWNMENOT_API AWaveManager : public AActor
@@ -60,6 +68,17 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void StartNextWave();
+
+	UPROPERTY(BlueprintAssignable, Category = "Wave")
+	FOnWaveInfoChanged OnWaveInfoChanged;
+
+	UFUNCTION(BlueprintCallable, Category = "Wave")
+	void GetCurrentWaveInfo(int32& OutCurrentEnemyCount, int32& OutTotalWaveEnemyCount, int32& OutCurrentWaveNumber) const
+	{
+		OutCurrentEnemyCount = EnemyCountThisWave - NumEnemiesKilledThisWave;
+		OutTotalWaveEnemyCount = EnemyCountThisWave;
+		OutCurrentWaveNumber = CurrentWave;
+	}
 
 private:
 	void StartNextProceduralWave(int EnemyCount);

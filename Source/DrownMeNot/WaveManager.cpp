@@ -54,6 +54,7 @@ void AWaveManager::StartNextWave()
 		StartNextEasyWavePreset(CurrentWave);
 		break;
 	}
+	OnWaveInfoChanged.Broadcast(EnemyCountThisWave - NumEnemiesKilledThisWave, EnemyCountThisWave, CurrentWave);
 }
 
 void AWaveManager::StartNextProceduralWave(int EnemyCount)
@@ -105,21 +106,17 @@ void AWaveManager::OnCharacterDied()
 {
 	NumEnemiesKilledThisWave++;
 
-	//print num enemies killed
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Enemies Killed This Wave: %d / %d"), NumEnemiesKilledThisWave, EnemyCountThisWave));
-
 	if (NumEnemiesKilledThisWave >= EnemyCountThisWave && EnemyCountThisWave > 0) {
 		ProcessWaveEnd();
 	}
+
+	OnWaveInfoChanged.Broadcast(EnemyCountThisWave - NumEnemiesKilledThisWave, EnemyCountThisWave, CurrentWave);
 }
 
 void AWaveManager::ProcessWaveEnd()
 {
 	NumEnemiesKilledThisWave = 0;
 	EnemyCountThisWave = 0;
-
-	// debug print that wave ended
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Wave %d Ended"), CurrentWave));
 
 	if (CurrentWave < TotalWaveCount) {
 		StartNextWave();
